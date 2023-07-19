@@ -4,10 +4,6 @@ interface SideBar {
   notes: { id: string; note: string }[];
 }
 
-// useEffect(() => {
-//   notes;
-// }, []);
-
 const SideBar = ({ notes }: SideBar) => {
   return (
     <Styled.SideBar>
@@ -16,8 +12,10 @@ const SideBar = ({ notes }: SideBar) => {
         <button>+</button>
       </Styled.SideBarBox>
       <Styled.SideBarList>
-        {notes.map((item) => (
-          <li key={item.id}>{item.note}</li>
+        {notes.map((item, index) => (
+          <li key={item.id}>
+            <button>Note {index + 1}</button>
+          </li>
         ))}
       </Styled.SideBarList>
     </Styled.SideBar>
