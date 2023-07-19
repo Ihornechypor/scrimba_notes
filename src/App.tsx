@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import Split from 'react-split';
-import { default as Editor, default as Section } from './components/Editor';
+import Editor from './components/Editor';
 import { Main } from './components/Layout';
 import SideBar from './components/SideBar';
 import GlobalStyle from './styles/globalStyles';
 
 function App() {
   const [editorValue, setEditorValue] = useState();
-
+  const [notes, setNotes] = useState([]);
   const handleEditorValue = (value: any) => setEditorValue(value);
 
   return (
@@ -25,7 +25,7 @@ function App() {
           direction="horizontal"
           cursor="col-resize"
         >
-          <SideBar />
+          <SideBar notes={notes} />
           <Editor editorValue={editorValue} handleEditorValue={handleEditorValue} />
         </Split>
       </Main>

@@ -1,10 +1,27 @@
 import * as Styled from './SideBar.styles';
+
 interface SideBar {
-  some?: '';
+  notes: { id: string; note: string }[];
 }
 
-const SideBar = ({ some }: SideBar) => {
-  return <Styled.SideBar>{some}</Styled.SideBar>;
+// useEffect(() => {
+//   notes;
+// }, []);
+
+const SideBar = ({ notes }: SideBar) => {
+  return (
+    <Styled.SideBar>
+      <Styled.SideBarBox>
+        <h1>Notes</h1>
+        <button>+</button>
+      </Styled.SideBarBox>
+      <Styled.SideBarList>
+        {notes.map((item) => (
+          <li key={item.id}>{item.note}</li>
+        ))}
+      </Styled.SideBarList>
+    </Styled.SideBar>
+  );
 };
 
 export default SideBar;

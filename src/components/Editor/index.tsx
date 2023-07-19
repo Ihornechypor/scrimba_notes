@@ -1,5 +1,4 @@
 import MDEditor from '@uiw/react-md-editor';
-import { useState } from 'react';
 import * as Styled from './Editor.styles';
 
 interface EditorProps {
