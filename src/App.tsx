@@ -10,9 +10,8 @@ import GlobalStyle from './styles/globalStyles';
 function App() {
   const [notes, setNotes] = useState<{ id: string; note: any }[]>([]);
   const handleEditorValue = (id: string, value: any) => {
+    console.log(id, value);
     setNotes((prev) => {
-      console.log();
-
       return [{ ...prev, id: id, note: value }];
     });
   };
@@ -31,7 +30,7 @@ function App() {
         cursor="col-resize"
       >
         <SideBar notes={notes} />
-        <Editor editorValue={{ id: notes[0].id, note: notes[0].note }} handleEditorValue={handleEditorValue} />
+        <Editor editorValue={notes[0].note} handleEditorValue={handleEditorValue} id={notes[0].id} />
       </Split>
     ) : (
       <Welcome text="you don't have notes" handleEditorValue={handleEditorValue} />
