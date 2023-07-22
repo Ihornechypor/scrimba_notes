@@ -3,15 +3,14 @@ import * as Styled from './Welcome.styles';
 
 interface WelcomeProps {
   text: string;
-  handleEditorValue: (id: string, note: any) => void;
+  handleEditorValue: ({ id, note, active }: any) => void;
 }
 
 const Welcome = ({ text, handleEditorValue }: WelcomeProps) => {
-  const handleWelcomeValue = () => handleEditorValue(nanoid(), 'first note');
   return (
     <Styled.WelcomeBox>
       <h1>{text}</h1>
-      <button onClick={handleWelcomeValue}>{text}</button>
+      <button onClick={() => handleEditorValue({ id: nanoid(), note: '', active: true })}>{text}</button>
     </Styled.WelcomeBox>
   );
 };

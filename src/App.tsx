@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 import Split from 'react-split';
 import Editor from './components/Editor';
@@ -8,13 +7,27 @@ import Welcome from './components/Welcome';
 import GlobalStyle from './styles/globalStyles';
 
 function App() {
-  const [notes, setNotes] = useState<{ id: string; note: any }[]>([]);
-  const handleEditorValue = (id: string, value: any) => {
-    console.log(id, value);
-    setNotes((prev) => {
-      return [{ ...prev, id: id, note: value }];
-    });
+  const [notes, setNotes] = useState<{ id: string; note: any; active: boolean }[]>([]);
+
+  const handleEditorValue = (props: { id: string; note: any; active: boolean }) => {
+    // eslint-disable-next-line react/prop-types
+    const oldData = notes.find((item) => item.id === props.id);
+    oldData
+      ? setNotes((prev) => prev.map((item) => (item.id === oldData.id ? { ...item, ...props } : { ...item })))
+      : setNotes((prev) => [...prev, props]);
   };
+
+  const handleActiveId = (id: string) => {
+    setNotes((prev) => prev.map((item) => (item.id === id ? { ...item, active: true } : { ...item, active: false })));
+  };
+
+  const renderSidebar = () => (
+    <SideBar notes={notes} handleEditorValue={handleEditorValue} handleActiveId={handleActiveId} />
+  );
+
+  useEffect(() => {
+    renderSidebar();
+  }, [notes]);
 
   const renderWorkSpase = () =>
     notes.length !== 0 ? (
@@ -29,8 +42,10 @@ function App() {
         direction="horizontal"
         cursor="col-resize"
       >
-        <SideBar notes={notes} />
-        <Editor editorValue={notes[0].note} handleEditorValue={handleEditorValue} id={notes[0].id} />
+        {renderSidebar()}
+        <div>
+          <Editor editorData={notes.find((item) => item.active && item)} handleEditorValue={handleEditorValue} />
+        </div>
       </Split>
     ) : (
       <Welcome text="you don't have notes" handleEditorValue={handleEditorValue} />

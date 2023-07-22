@@ -1,5 +1,8 @@
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 
+interface SideBarSylesProps {
+  btnActive?: boolean;
+}
 const SideBar = styled.aside`
   height: 100vh;
   width: 100%;
@@ -13,16 +16,23 @@ const SideBarBox = styled.div`
   justify-content: space-between;
 `;
 
-const SideBarList = styled.ul`
+const SideBarList = styled.ul<SideBarSylesProps>`
   list-style: none;
   padding: 0;
-  li button {
-    display: block;
-    width: 100%;
-    border: none;
-    text-align: left;
-    background-color: lightblue;
-    padding: 10px;
-  }
 `;
-export { SideBar, SideBarBox, SideBarList };
+
+const SideBarBtn = styled.button<SideBarSylesProps>`
+  display: block;
+  width: 100%;
+  border: none;
+  text-align: left;
+
+  padding: 10px;
+  ${(props) =>
+    props.btnActive &&
+    css`
+      background-color: lightblue;
+    `}
+`;
+
+export { SideBar, SideBarBox, SideBarBtn, SideBarList };
