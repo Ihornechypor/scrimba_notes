@@ -15,10 +15,10 @@ const SideBar = ({ notes, handleEditorValue, handleActiveId }: SideBar) => {
         <button onClick={() => handleEditorValue({ id: nanoid(), note: '', active: false })}>+</button>
       </Styled.SideBarBox>
       <Styled.SideBarList>
-        {notes.map((item, index) => (
+        {notes.map((item) => (
           <li key={item.id}>
             <Styled.SideBarBtn {...(item.active ? { btnActive: true } : {})} onClick={() => handleActiveId(item.id)}>
-              {item.note.length !== 0 ? item.note.substring(0, 3) + `...` : 'Empty note'}
+              {item.note.length !== 0 ? item.note.split('\n')[0] : 'Empty note'}
             </Styled.SideBarBtn>
           </li>
         ))}

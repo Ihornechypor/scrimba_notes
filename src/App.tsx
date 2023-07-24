@@ -13,12 +13,8 @@ function App() {
 
   useEffect(() => localStorage.setItem('savedNotes', JSON.stringify(notes)), [notes]);
 
-  function handleEditorValue(props: { id: string; note: any; active: boolean }) {
-    const oldData = notes.find((item) => item.id === props.id);
-    oldData
-      ? setNotes((prev) => prev.map((item) => (item.id === oldData.id ? { ...item, ...props } : { ...item })))
-      : setNotes((prev) => [...prev, props]);
-  }
+  const handleEditorValue = (props: { id: string; note: any; active: boolean }) =>
+    setNotes((prev) => [props, ...prev.filter((item) => item.id !== props.id)]);
 
   const handleActiveId = (id: string) =>
     setNotes((prev) => prev.map((item) => (item.id === id ? { ...item, active: true } : { ...item, active: false })));
