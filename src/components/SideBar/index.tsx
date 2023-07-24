@@ -18,7 +18,7 @@ const SideBar = ({ notes, handleEditorValue, handleActiveId }: SideBar) => {
         {notes.map((item, index) => (
           <li key={item.id}>
             <Styled.SideBarBtn {...(item.active ? { btnActive: true } : {})} onClick={() => handleActiveId(item.id)}>
-              Note {index + 1}{' '}
+              {item.note.length !== 0 ? item.note.substring(0, 3) + `...` : 'Empty note'}
             </Styled.SideBarBtn>
           </li>
         ))}

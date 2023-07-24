@@ -1,5 +1,5 @@
 export interface editorTypes {
-  id: string | undefined;
+  id: string;
   note: any;
-  active: boolean | undefined;
+  active: boolean;
 }

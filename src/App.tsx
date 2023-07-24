@@ -7,27 +7,23 @@ import Welcome from './components/Welcome';
 import GlobalStyle from './styles/globalStyles';
 
 function App() {
-  const [notes, setNotes] = useState<{ id: string; note: any; active: boolean }[]>([]);
+  const [notes, setNotes] = useState<{ id: string; note: any; active: boolean }[]>(
+    () => (localStorage.getItem('savedNotes') && JSON.parse(localStorage.getItem('savedNotes') || '')) || [],
+  );
 
-  const handleEditorValue = (props: { id: string; note: any; active: boolean }) => {
-    // eslint-disable-next-line react/prop-types
+  useEffect(() => localStorage.setItem('savedNotes', JSON.stringify(notes)), [notes]);
+
+  function handleEditorValue(props: { id: string; note: any; active: boolean }) {
     const oldData = notes.find((item) => item.id === props.id);
     oldData
       ? setNotes((prev) => prev.map((item) => (item.id === oldData.id ? { ...item, ...props } : { ...item })))
       : setNotes((prev) => [...prev, props]);
-  };
+  }
 
-  const handleActiveId = (id: string) => {
+  const handleActiveId = (id: string) =>
     setNotes((prev) => prev.map((item) => (item.id === id ? { ...item, active: true } : { ...item, active: false })));
-  };
 
-  const renderSidebar = () => (
-    <SideBar notes={notes} handleEditorValue={handleEditorValue} handleActiveId={handleActiveId} />
-  );
-
-  useEffect(() => {
-    renderSidebar();
-  }, [notes]);
+  const findActiveNote = () => notes.find((item) => item.active && item);
 
   const renderWorkSpase = () =>
     notes.length !== 0 ? (
@@ -42,10 +38,8 @@ function App() {
         direction="horizontal"
         cursor="col-resize"
       >
-        {renderSidebar()}
-        <div>
-          <Editor editorData={notes.find((item) => item.active && item)} handleEditorValue={handleEditorValue} />
-        </div>
+        <SideBar notes={notes} handleEditorValue={handleEditorValue} handleActiveId={handleActiveId} />
+        <Editor editorData={findActiveNote()} handleEditorValue={handleEditorValue} />
       </Split>
     ) : (
       <Welcome text="you don't have notes" handleEditorValue={handleEditorValue} />
