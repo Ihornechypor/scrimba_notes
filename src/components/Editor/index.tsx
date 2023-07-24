@@ -2,11 +2,13 @@ import MDEditor from '@uiw/react-md-editor';
 import * as Styled from './Editor.styles';
 
 interface EditorProps {
-  editorData: {
-    id: string;
-    note: any;
-    active: boolean;
-  };
+  editorData:
+    | {
+        id: string;
+        note: any;
+        active: boolean;
+      }
+    | undefined;
   handleEditorValue: ({ id, note, active }: { id: string; note: any; active: boolean }) => void;
 }
 const Editor = ({ editorData, handleEditorValue }: EditorProps) => {

@@ -5,9 +5,10 @@ interface SideBar {
   notes: { id: string; note: string; active: boolean }[];
   handleEditorValue: ({ id, note, active }: any) => void;
   handleActiveId: (id: string) => void;
+  handleDeleteValue: (id: string) => void;
 }
 
-const SideBar = ({ notes, handleEditorValue, handleActiveId }: SideBar) => {
+const SideBar = ({ notes, handleEditorValue, handleActiveId, handleDeleteValue }: SideBar) => {
   return (
     <Styled.SideBar>
       <Styled.SideBarBox>
@@ -17,9 +18,10 @@ const SideBar = ({ notes, handleEditorValue, handleActiveId }: SideBar) => {
       <Styled.SideBarList>
         {notes.map((item) => (
           <li key={item.id}>
-            <Styled.SideBarBtn {...(item.active ? { btnActive: true } : {})} onClick={() => handleActiveId(item.id)}>
+            <Styled.SideBarItm {...(item.active ? { btnActive: true } : {})} onClick={() => handleActiveId(item.id)}>
               {item.note.length !== 0 ? item.note.split('\n')[0] : 'Empty note'}
-            </Styled.SideBarBtn>
+              <Styled.SideBarBtn onClick={() => handleDeleteValue(item.id)}>-</Styled.SideBarBtn>
+            </Styled.SideBarItm>
           </li>
         ))}
       </Styled.SideBarList>

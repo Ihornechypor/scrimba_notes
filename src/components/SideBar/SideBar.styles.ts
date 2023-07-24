@@ -21,11 +21,13 @@ const SideBarList = styled.ul<SideBarSylesProps>`
   padding: 0;
 `;
 
-const SideBarBtn = styled.button<SideBarSylesProps>`
-  display: block;
+const SideBarItm = styled.div<SideBarSylesProps>`
+  display: flex;
   width: 100%;
   border: none;
   text-align: left;
+  justify-content: space-between;
+  align-items: center;
 
   padding: 10px;
   ${(props) =>
@@ -35,4 +37,6 @@ const SideBarBtn = styled.button<SideBarSylesProps>`
     `}
 `;
 
-export { SideBar, SideBarBox, SideBarBtn, SideBarList };
+const SideBarBtn = styled.button``;
+
+export { SideBar, SideBarBox, SideBarBtn, SideBarItm, SideBarList };

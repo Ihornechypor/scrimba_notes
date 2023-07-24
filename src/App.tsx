@@ -16,6 +16,8 @@ function App() {
   const handleEditorValue = (props: { id: string; note: any; active: boolean }) =>
     setNotes((prev) => [props, ...prev.filter((item) => item.id !== props.id)]);
 
+  const handleDeleteValue = (id: string) => setNotes((prev) => prev.filter((item) => item.id !== id));
+
   const handleActiveId = (id: string) =>
     setNotes((prev) => prev.map((item) => (item.id === id ? { ...item, active: true } : { ...item, active: false })));
 
@@ -34,7 +36,12 @@ function App() {
         direction="horizontal"
         cursor="col-resize"
       >
-        <SideBar notes={notes} handleEditorValue={handleEditorValue} handleActiveId={handleActiveId} />
+        <SideBar
+          notes={notes}
+          handleEditorValue={handleEditorValue}
+          handleActiveId={handleActiveId}
+          handleDeleteValue={handleDeleteValue}
+        />
         <Editor editorData={findActiveNote()} handleEditorValue={handleEditorValue} />
       </Split>
     ) : (
