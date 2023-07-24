@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import { React } from 'react';
 import * as Styled from './SideBar.styles';
 
 interface SideBar {
@@ -20,7 +21,14 @@ const SideBar = ({ notes, handleEditorValue, handleActiveId, handleDeleteValue }
           <li key={item.id}>
             <Styled.SideBarItm {...(item.active ? { btnActive: true } : {})} onClick={() => handleActiveId(item.id)}>
               {item.note.length !== 0 ? item.note.split('\n')[0] : 'Empty note'}
-              <Styled.SideBarBtn onClick={() => handleDeleteValue(item.id)}>-</Styled.SideBarBtn>
+              <Styled.SideBarBtn
+                onClick={(e: React.ChangeEvent<HTMLButtonElement>) => {
+                  e.stopPropagation;
+                  handleDeleteValue(item.id);
+                }}
+              >
+                -
+              </Styled.SideBarBtn>
             </Styled.SideBarItm>
           </li>
         ))}

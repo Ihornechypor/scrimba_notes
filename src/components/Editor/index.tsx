@@ -14,13 +14,15 @@ interface EditorProps {
 const Editor = ({ editorData, handleEditorValue }: EditorProps) => {
   return (
     <Styled.Editor data-color-mode="light">
-      <MDEditor
-        value={editorData?.note}
-        height="100%"
-        onChange={(e) => {
-          handleEditorValue({ id: editorData?.id, note: e, active: editorData?.active });
-        }}
-      />
+      {editorData?.active && (
+        <MDEditor
+          value={editorData?.note}
+          height="100%"
+          onChange={(e) => {
+            handleEditorValue({ id: editorData?.id, note: e, active: editorData?.active });
+          }}
+        />
+      )}
     </Styled.Editor>
   );
 };
