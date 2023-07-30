@@ -1,5 +1,6 @@
 export interface editorTypes {
   id: string;
   note: any;
-  active: boolean;
+  createDate: number;
+  updateDate: number;
 }

@@ -1,16 +1,16 @@
-import { nanoid } from 'nanoid';
 import * as Styled from './Welcome.styles';
+import { nanoid } from 'nanoid';
 
 interface WelcomeProps {
   text: string;
-  handleEditorValue: ({ id, note, active }: any) => void;
+  handleCreateNewNote: () => void;
 }
 
-const Welcome = ({ text, handleEditorValue }: WelcomeProps) => {
+const Welcome = ({ text, handleCreateNewNote }: WelcomeProps) => {
   return (
     <Styled.WelcomeBox>
       <h1>{text}</h1>
-      <button onClick={() => handleEditorValue({ id: nanoid(), note: '', active: true })}>{text}</button>
+      <button onClick={() => handleCreateNewNote()}>{text}</button>
     </Styled.WelcomeBox>
   );
 };

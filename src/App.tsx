@@ -5,23 +5,43 @@ import { Main } from './components/Layout';
 import SideBar from './components/SideBar';
 import Welcome from './components/Welcome';
 import GlobalStyle from './styles/globalStyles';
+import { onSnapshot, addDoc, deleteDoc, doc, setDoc } from 'firebase/firestore';
+import { notesCollection, db } from './firebase';
+import { editorTypes } from './types/index';
 
 function App() {
-  const [notes, setNotes] = useState<{ id: string; note: any; active: boolean }[]>(
-    () => (localStorage.getItem('savedNotes') && JSON.parse(localStorage.getItem('savedNotes') || '')) || [],
-  );
+  const [notes, setNotes] = useState<editorTypes[]>([]);
+  const [currNoteId, setCurrId] = useState('');
 
-  useEffect(() => localStorage.setItem('savedNotes', JSON.stringify(notes)), [notes]);
+  useEffect(() => {
+    const unsubsctibe = onSnapshot(notesCollection, (snapshot) => {
+      const noteArr = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      setNotes(noteArr);
+    });
+    return unsubsctibe;
+  }, []);
 
-  const handleEditorValue = (props: { id: string; note: any; active: boolean }) =>
-    setNotes((prev) => [props, ...prev.filter((item) => item.id !== props.id)]);
+  const sortedNotes = notes.sort((a, b) => b.updateDate - a.updateDate);
 
-  const handleDeleteValue = (id: string) => setNotes((prev) => prev.filter((item) => item.id !== id));
+  const handleEditorValue = async (value: string) => {
+    const notesRef = doc(db, 'notes', currNoteId);
+    await setDoc(notesRef, { note: value, updateDate: Date.now() }, { merge: true });
+  };
 
-  const handleActiveId = (id: string) =>
-    setNotes((prev) => prev.map((item) => (item.id === id ? { ...item, active: true } : { ...item, active: false })));
+  const handleCreateNewNote = async () => {
+    const newNote = {
+      note: "# Type your markdown note's title here",
+      createDate: Date.now(),
+      updateDate: Date.now(),
+    };
+    await addDoc(notesCollection, newNote);
+  };
 
-  const findActiveNote = () => notes.find((item) => item.active && item);
+  const handleDeleteValue = async (id: string) => {
+    await deleteDoc(doc(db, 'notes', id));
+  };
+
+  const findActiveNote = () => notes.find((item) => item.id === currNoteId);
 
   const renderWorkSpase = () =>
     notes.length !== 0 ? (
@@ -37,15 +57,16 @@ function App() {
         cursor="col-resize"
       >
         <SideBar
-          notes={notes}
-          handleEditorValue={handleEditorValue}
-          handleActiveId={handleActiveId}
+          notes={sortedNotes}
+          handleCreateNewNote={handleCreateNewNote}
           handleDeleteValue={handleDeleteValue}
+          currNoteId={currNoteId}
+          setCurrId={setCurrId}
         />
         <Editor editorData={findActiveNote()} handleEditorValue={handleEditorValue} />
       </Split>
     ) : (
-      <Welcome text="you don't have notes" handleEditorValue={handleEditorValue} />
+      <Welcome text="you don't have notes" handleCreateNewNote={handleCreateNewNote} />
     );
 
   useEffect(() => {
