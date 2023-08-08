@@ -12,6 +12,7 @@ import { editorTypes } from './types/index';
 function App() {
   const [notes, setNotes] = useState<editorTypes[]>([]);
   const [currNoteId, setCurrId] = useState('');
+  const [temText, setTempText] = useState('');
 
   useEffect(() => {
     const unsubsctibe = onSnapshot(notesCollection, (snapshot) => {
@@ -22,11 +23,20 @@ function App() {
   }, []);
 
   const sortedNotes = notes.sort((a, b) => b.updateDate - a.updateDate);
+  const findActiveNote = () => notes.find((item) => item.id === currNoteId);
 
   const handleEditorValue = async (value: string) => {
     const notesRef = doc(db, 'notes', currNoteId);
     await setDoc(notesRef, { note: value, updateDate: Date.now() }, { merge: true });
   };
+
+  useEffect(() => {
+    const timeId = setTimeout(() => {
+      temText !== findActiveNote()?.note && handleEditorValue(temText);
+    }, 500);
+
+    return () => clearTimeout(timeId);
+  }, [temText]);
 
   const handleCreateNewNote = async () => {
     const newNote = {
@@ -40,8 +50,6 @@ function App() {
   const handleDeleteValue = async (id: string) => {
     await deleteDoc(doc(db, 'notes', id));
   };
-
-  const findActiveNote = () => notes.find((item) => item.id === currNoteId);
 
   const renderWorkSpase = () =>
     notes.length !== 0 ? (
@@ -63,7 +71,7 @@ function App() {
           currNoteId={currNoteId}
           setCurrId={setCurrId}
         />
-        <Editor editorData={findActiveNote()} handleEditorValue={handleEditorValue} />
+        <Editor temText={temText} setTempText={setTempText} />
       </Split>
     ) : (
       <Welcome text="you don't have notes" handleCreateNewNote={handleCreateNewNote} />
@@ -72,6 +80,12 @@ function App() {
   useEffect(() => {
     renderWorkSpase();
   }, [notes]);
+
+  useEffect(() => {
+    if (currNoteId) {
+      setTempText(findActiveNote()?.note);
+    }
+  }, [currNoteId]);
 
   return (
     <>

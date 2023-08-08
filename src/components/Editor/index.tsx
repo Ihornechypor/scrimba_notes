@@ -3,21 +3,19 @@ import * as Styled from './Editor.styles';
 import { editorTypes } from '../../types';
 
 interface EditorProps {
-  editorData: editorTypes | undefined;
-  handleEditorValue: (e: any) => void;
+  temText: string;
+  setTempText: React.Dispatch<React.SetStateAction<string>>;
 }
-const Editor = ({ editorData, handleEditorValue }: EditorProps) => {
+const Editor = ({ temText, setTempText }: EditorProps) => {
   return (
     <Styled.Editor data-color-mode="light">
-      {editorData?.note && (
-        <MDEditor
-          value={editorData?.note}
-          height="100%"
-          onChange={(e) => {
-            handleEditorValue(e);
-          }}
-        />
-      )}
+      <MDEditor
+        value={temText}
+        height="100%"
+        onChange={(e) => {
+          setTempText(e);
+        }}
+      />
     </Styled.Editor>
   );
 };
